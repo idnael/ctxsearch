@@ -1,0 +1,14 @@
+
+# Basic actions file for CtxSearch
+# See manpage for details about the format of this file.
+
+actions:
+   - title:     Google search
+     web:  https://www.google.pt/search?q=XYZ
+
+   - title:     Wikipedia
+     web:  http://en.wikipedia.org/w/index.php?search=XYZ
+
+   - title:     Espeak en
+     languages: en
+     command:   espeak -v en-us

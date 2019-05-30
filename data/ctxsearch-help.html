@@ -1,0 +1,262 @@
+<head>
+<meta content="text/html; charset=utf-8"  http-equiv="content-type">
+<title>CtxSearch manual</title>
+</head>
+
+<body>
+
+<h1>CtxSearch version 0.5</h1>
+<p>
+Run actions on selected text
+</p>
+
+<h2>Description</h2>
+<p>
+This program should be run in the background when the desktop sessions starts. After that, in any application window, select a region of text. A floating icon will appear near the mouse position. Click on it to open a context menu with actions you can do with the selected text, like searching it in Wikipedia, or send it to a speech synthesizer program.
+</p>
+
+<p>
+This program was inspired on the Context Search extension for Google Chrome.
+</p>
+
+<h2>Configuration</h2>
+
+<p>
+The actions are defined in the configuration file, in ~/.ctxsearch/actions.yaml . That file is read again every time it changes, so there is no need to restart the program. It is in YAML format described in <a href="http://en.wikipedia.org/wiki/YAML">http://en.wikipedia.org/wiki/YAML</a> .
+</p>
+
+<p>
+There are two types of actions. Those that open a web location, and those that execute an external command.
+</p>
+
+<p>
+This is the format of this file:
+</p>
+
+<pre>
+&lt;global property&gt; : &lt;value&gt;
+...
+actions:
+   - &lt;first action property 1&gt;: &lt;value&gt;
+     &lt;first action property 2&gt;: &lt;value&gt;
+     ...
+   - &lt;second action property 1&gt;: &lt;value&gt;
+     &lt;second action property 2&gt;: &lt;value&gt;
+     ...
+...
+</pre>
+
+<h3>Properties for defining actions</h3>
+
+<p>
+<b>title:</b>
+This is the text that will appear in the context menu.
+</p>
+
+<p>
+<b>priority:</b>
+A number between 1 and 9. 1 means highest priority. If there are too many actions in the menu, only the highest priority will show first. 
+</p>
+
+<p>
+<b>icon:</b>
+The icon to show in the menu. Should be the name of a file inside the configuration directory ~/.ctxsearch
+</p>
+
+<p>
+<b>separator:</b>
+This does not define an action, but adds a separator to the menu at this point.
+</p>
+
+<p>
+<b>location:</b>
+Defines a web action. This is the url to open, where XYZ will be replaced by the (urlencoded) selected text.
+</p>
+
+<p>
+<b>command:</b>
+Defines an command action. Runs this linux command as a shell, and passing the selected text as input. Should not be used in conjuntion with &quot;location&quot;.
+</p>
+
+<p>
+These properties are only valid for web actions:
+</p>
+
+<p>
+<b>target:</b>
+Where the web page should open. 'internal' mean to use an internal browser window. 'browser' means to use the default browser. 'detect' means to use the default browser if it is the current active program, or else to use the internal window.
+</p>
+
+<p>
+<b>width:</b>
+Changes the window width in pixels.
+</p>
+
+<p>
+<b>height:</b>
+Changes the window height in pixels.
+</p>
+
+<h3>Conditional action properties</h3>
+
+<p>
+The action will be show only if the condition is verified.
+</p>
+
+<p>
+<b>languages:</b>
+A comma separated list of language ids. The action will only be visible if the text matches any of these languages (or if the text language could not be detected). This needs the Langid library available in <a href="https://pypi.python.org/pypi/langid">https://pypi.python.org/pypi/langid</a> .
+</p>
+
+<p>
+<b>max_words:</b>
+The text must have this or more words. For dictionary websites for instance, probably you only want when the text as only one word (or two maybe).
+</p>
+
+<p>
+<b>min_words:</b>
+The text must have this or more words.
+</p>
+
+<p>
+<b>match:</b>
+A python regular expression that must match in the selected text. See <a href="http://docs.python.org/2/library/re.html">http://docs.python.org/2/library/re.html</a>
+</p>
+
+<h3>Global properties</h3>
+
+<p>
+<b>languages:</b>
+A comma separated list of language ids you work with. If you provided a limited set, this will improve the language identification accuracy.
+</p>
+
+<p>
+<b>width:</b>
+Default window width for web actions. Can be overrided in an action.
+</p>
+
+<p>
+<b>height:</b>
+Default window height for web actions. Can be overrided in an action.
+</p>
+
+<p>
+<b>menu_max_size:</b>
+Maximum actions in the menu. More actions will go to a sub menu.
+</p>
+
+<p>
+<b>hide_time:</b>
+Time in seconds after which the floating icon disappears. Default value is 3.
+</p>
+
+<p>
+<b>hide_distance:</b>
+If the mouse moves these pixels away from the floating icon, it disappears. Default value is 400.
+</p>
+
+<p>
+<b>selection_delay:</b>
+Interval in seconds after the selection is made, until the floating point shows. It is good to put a non zero value because some programs create continuos selections while the user is dragging the mouse. Default value is 0.15.
+</p>
+
+<p>
+<b>selection_distance:</b>
+Vertical distance in pixels where the floating icon shows, relative to the mouse position.
+</p>
+
+<p>
+<b>debug:</b>
+If True, output some extra information.
+</p>
+
+<p>
+<b>browser:</b>
+The command used to open a location, when the target is &quot;browser&quot;. If not defined, use the system default. The word URL is replaced by the (unquoted) location to be open. If not present, the URL is added at the end, quoted.
+</p>
+
+<p>
+<b>detected.chrome, detected.firefox etc:</b>
+The command used to open a location, when the target is &quot;detect&quot; and the selection was made in one of this programs.
+</p>
+
+<h2>Example</h2>
+
+<pre>
+languages: pt,en,fr, es
+actions:
+   - title:     Wikipedia en
+     languages: en
+     max_words: 4
+     location:  http://en.wikipedia.org/w/index.php?search=XYZ
+     target:    detect
+     width:     600
+
+   - title:     Wikcionario Português
+     languages: pt
+     max_words: 2
+     location:  http://pt.wiktionary.org/wiki/XYZ
+     target:    internal  # uses always the internal webkit window
+
+   - title:     Open location
+     # open the selected url!
+     match:     ^(https?:|www\.).*
+     location:  XYZ
+     location.quote: False # disable url quoting the text
+     target:    browser  # uses the default browser
+     priority:  1
+
+   - title:     Translate en-pt
+     languages: en
+     location:  https://translate.google.pt/#en/pt/TEXT
+     location.token: TEXT # use this instead of XYZ
+     width:     800
+
+   - title:     Espeak pt
+     command:   espeak -v pt-pt
+     languages: pt
+     icon:      portugal_flag.gif
+</pre>
+
+<h3>How it works</h2>
+
+<p>
+It works by detecting that a text was copied to the primary selection, which happens automatically when the user select a region of text. The floating icon that shows is a small transparent window without borders, that only displays one image, and is always on top of the other windows.
+</p>
+
+<p>
+It doesn't interfere with the currently active window because the new window doesn't get the focus and it is positioned not exactly over the mouse but slighly to the side. 
+</p>
+
+<p>
+It the user clicks the icon, a context menu will be displayed.
+</p>
+
+<p>
+If not, there are several ways for the floating icon to disappear:
+<ul>
+<li>After a certain amount of time.</li>
+<li>When the mouse distances itself from the icon position.</li>
+<li>When the user does some action, like pressing the mouse or the using the keyboard.</li>
+</ul>
+</p>
+
+<h2>Know problems</h2>
+
+<p>
+There are some programs that don't copy to clipboard when a region of text is selected, so this program won't work in those situations. For instance LibreOffice only works when you double click text.
+If your window is 'always above' the floating icon will not show above it.
+</p>
+
+<p>
+If using xfce, please go to &quot;Settings / Window Manager Tweaks&quot; and enable &quot;Display Compositing&quot;.
+</p>
+
+<h2>Author</h2>
+
+<p>
+Copyright 2013, Daniel P. Carvalho <idnael@pegada.net>
+</p>
+
+
+</body>

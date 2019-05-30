@@ -1,0 +1,22 @@
+Source: ctxsearch
+Maintainer: Daniel Carvalho <idnael@pegada.net>
+Section: utils
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3), debhelper (>= 7.4.3), python-setuptools
+Standards-Version: 3.9.1
+
+Package: ctxsearch
+Version: 0.5.0-1
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-yaml,python3-gi,python3-gi-cairo,python-webkit, xdotool (>= 1:2.20110530.1-3ubuntu1),python-numpy,python-stdeb,python-psutil, python-html2text
+Description: Run actions on selected text.
+ In any application window, select a region of text. An floating icon will 
+ appear near the mouse position. Click on it to open a context menu with 
+ actions you can do with the selected text, like searching it in Wikipedia, 
+ or send it to a speech synthesizer program. The program can also detect
+ the text language, and show different actions based on that. 
+ To run every time a desktop session starts, go to Startup Applications,
+ and activate the line that says "Context Search". Or if it is not 
+ present on the list, create a new entry where command should be
+ "ctxsearch". Then, logout and login again.
+ 

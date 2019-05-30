@@ -1,0 +1,4 @@
+
+
+
+Do actions on selected text. Idea was based on Context Search extension for googlechrome! To add more actions edit the file .ctxsearch/actions.yaml in your home directory!\n")

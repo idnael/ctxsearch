@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/comp/CtxSearch/2019SRC
+
+python3 scripts/ctxsearch_ola.py "$@"
+

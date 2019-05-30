@@ -1,0 +1,32 @@
+languages: pt,en,fr,es
+
+# Basic actions file for CtxSearch
+# See manpage for details about the format of this file.
+
+actions:
+   - title:     Open location
+     # no quote here
+     web:  ${text}
+     text__match:     ^(https?:|www\.).*
+     #target:    browser
+     priority:  1
+
+merda:
+   - web:  https://www.google.pt/search?q={text__quote}
+     or:
+       - text__words__gt: 5
+         title: "google search grande"
+
+       - title: "google search pequeno"
+
+   - title:     Wikipedia pt
+     web:  http://pt.wikipedia.org/wiki/{text__quote}
+     width: 600
+     
+
+   - title: Teste
+     submenu: 
+       - title: Ola
+         command: gnome-osd-client "Ola {text}"
+       - title: Adeus
+         command: gnome-osd-client "Adeus {text}"
